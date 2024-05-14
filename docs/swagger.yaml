@@ -1,0 +1,135 @@
+info:
+  contact: {}
+  description: This is a WebAPI providing cryptographically secure RNG
+  license:
+    name: MPL-2.0 License
+    url: https://www.mozilla.org/en-US/MPL/2.0/
+  title: RNG Service API
+  version: "1.0"
+paths:
+  /api/v1/GetAllAveragesRNG:
+    get:
+      consumes:
+      - application/json
+      description: Returns the average of the generated numbers for all users as a
+        list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Gets the averages of generated numbers so far
+  /api/v1/GetGenerationDetails:
+    get:
+      consumes:
+      - application/json
+      description: Returns a list in the specified paging range of generated numbers
+        so far
+      parameters:
+      - description: Page
+        in: query
+        name: page
+        type: string
+      - description: Count
+        in: query
+        name: count
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Returns a paged list of results
+  /api/v1/GetUserAverageRNG/{username}:
+    get:
+      consumes:
+      - application/json
+      description: Returns the average of the generated numbers for a given user or
+        all
+      parameters:
+      - description: Username
+        in: path
+        name: username
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "404":
+          description: Username not found
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Gets the average of generated numbers so far
+  /api/v1/GetUsers:
+    get:
+      consumes:
+      - application/json
+      description: Returns a list of all users who had made calls to the RNG endpoint
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Gets the list of users
+  /api/v1/Ping:
+    get:
+      consumes:
+      - application/json
+      description: Responds to a Ping with Pong
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Ping Endpoint
+  /api/v1/RandomFloat0to1/{username}:
+    get:
+      consumes:
+      - application/json
+      description: Generates a float64 between 0 and 1 using crypto/rand to ensure
+        cryptographically robust randomness
+      parameters:
+      - description: Username
+        in: path
+        name: username
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "405":
+          description: Disallowed Username
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Generate a float between 0 and 1
+securityDefinitions:
+  ApiKeyAuth:
+    description: API Key defined in the configuration file
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
